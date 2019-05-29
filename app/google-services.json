@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "435614169277",
+    "firebase_url": "https://couplelink-6e088.firebaseio.com",
+    "project_id": "couplelink-6e088",
+    "storage_bucket": "couplelink-6e088.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:435614169277:android:91ee538f96d48c9d",
+        "android_client_info": {
+          "package_name": "com.desertfox.couplelink"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "435614169277-v8kmpt3s9ahi0ltv7kc9s0mjlkrhoe9j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDjoZH5FJtfh8eaz4M621Jr0bUNZIoce2s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "435614169277-v8kmpt3s9ahi0ltv7kc9s0mjlkrhoe9j.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
