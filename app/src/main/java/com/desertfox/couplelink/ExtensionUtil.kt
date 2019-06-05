@@ -24,3 +24,8 @@ fun Context.toast(msg: String, duration: Int = Toast.LENGTH_SHORT) {
  * ViewClick 구현시 300ms 내에 중복클릭은 제외
  */
 fun View.throttleClicks() = this.clicks().throttleFirst(300, java.util.concurrent.TimeUnit.MILLISECONDS)!!
+
+/**
+ * sharedPreferences 구현
+ */
+fun Context.sharedPreferences() = this.getSharedPreferences(COUPLE_LINK,Context.MODE_PRIVATE)!!

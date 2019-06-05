@@ -7,7 +7,7 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 
 fun coupleLinkApi(): Api = Retrofit.Builder()
-    .baseUrl("http://54.180.152.196:8080/api/")
+    .baseUrl("http://54.180.152.196:8080/")
     .client(provideOkHttpClient(provideLoggingInterceptor()))
     .addCallAdapterFactory(RxJava2CallAdapterFactory.createAsync())
     .addConverterFactory(GsonConverterFactory.create())
