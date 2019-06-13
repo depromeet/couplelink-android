@@ -6,6 +6,9 @@ import androidx.core.content.edit
 import com.desertfox.couplelink.*
 import com.desertfox.couplelink.model.request.LoginRequest
 import com.desertfox.couplelink.network.coupleLinkApi
+import com.desertfox.couplelink.util.ACCESS_TOKEN
+import com.desertfox.couplelink.util.e
+import com.desertfox.couplelink.util.sharedPreferences
 import com.kakao.auth.ISessionCallback
 import com.kakao.auth.Session
 import com.kakao.util.exception.KakaoException
@@ -39,7 +42,7 @@ class LoginActivity : BaseActivity() {
     private inner class SessionCallback : ISessionCallback {
 
         override fun onSessionOpened() {
-            coupleLinkApi().login(LoginRequest(Session.getCurrentSession().tokenInfo.accessToken))
+            coupleLinkApi.login(LoginRequest(Session.getCurrentSession().tokenInfo.accessToken))
                 .subscribe({
                     sharedPreferences().edit {
                         putString(ACCESS_TOKEN, it.accessToken)
