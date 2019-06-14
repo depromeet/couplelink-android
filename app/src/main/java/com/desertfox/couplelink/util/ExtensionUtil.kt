@@ -1,9 +1,10 @@
-package com.desertfox.couplelink
+package com.desertfox.couplelink.util
 
 import android.content.Context
 import android.view.View
 import android.widget.Toast
 import androidx.annotation.StringRes
+import com.desertfox.couplelink.util.COUPLE_LINK
 import com.jakewharton.rxbinding3.view.clicks
 
 /**

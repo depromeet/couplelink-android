@@ -1,4 +1,4 @@
-package com.desertfox.couplelink
+package com.desertfox.couplelink.util
 
 import android.util.Log
 
