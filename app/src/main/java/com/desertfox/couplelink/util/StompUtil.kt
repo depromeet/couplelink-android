@@ -1,6 +1,8 @@
 package com.desertfox.couplelink.util
 
 import android.annotation.SuppressLint
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 
 import ua.naiksoftware.stomp.StompClient
 import ua.naiksoftware.stomp.dto.LifecycleEvent.Type.*
@@ -10,7 +12,10 @@ import ua.naiksoftware.stomp.dto.LifecycleEvent.Type.*
  */
 @SuppressLint("CheckResult")
 fun lifecycle(stompClient: StompClient) {
-    stompClient.lifecycle().subscribe { event ->
+    stompClient.lifecycle()
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe { event ->
         when (event.type) {
             OPENED -> d("Stomp connection opened")
 
