@@ -27,6 +27,8 @@ private fun provideOkHttpClient(interceptor: HttpLoggingInterceptor): OkHttpClie
 
 private fun provideLoggingInterceptor(): HttpLoggingInterceptor {
     val interceptor = HttpLoggingInterceptor()
-    interceptor.level = HttpLoggingInterceptor.Level.BODY
+    interceptor.apply {
+        level = HttpLoggingInterceptor.Level.BODY
+    }
     return interceptor
 }
