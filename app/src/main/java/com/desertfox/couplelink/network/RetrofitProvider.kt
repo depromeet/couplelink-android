@@ -8,7 +8,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 val coupleLinkApi: Api by lazy {
     Retrofit.Builder()
-        .baseUrl(StompUrl.BASE_URL + "/")
+        .baseUrl(StompUrl.BASE_URL)
         .client(provideOkHttpClient(provideLoggingInterceptor()))
         .addCallAdapterFactory(RxJava2CallAdapterFactory.createAsync())
         .addConverterFactory(GsonConverterFactory.create())

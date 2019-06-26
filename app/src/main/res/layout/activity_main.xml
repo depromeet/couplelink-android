@@ -46,7 +46,7 @@
         app:layout_constraintRight_toRightOf="parent">
 
         <EditText
-            android:id="@+id/ib_main_input_msg"
+            android:id="@+id/et_main_input_msg"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
