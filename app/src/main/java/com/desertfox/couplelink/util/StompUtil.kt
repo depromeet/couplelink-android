@@ -10,20 +10,22 @@ import ua.naiksoftware.stomp.dto.LifecycleEvent.Type.*
 /**
  * stomp client 상태를 체크하는 함수
  */
-@SuppressLint("CheckResult")
-fun lifecycle(stompClient: StompClient) {
-    stompClient.lifecycle()
-        .subscribeOn(Schedulers.io())
-        .observeOn(AndroidSchedulers.mainThread())
-        .subscribe { event ->
-        when (event.type) {
-            OPENED -> d("Stomp connection opened")
+object StompUtil {
+    @SuppressLint("CheckResult")
+    fun lifecycle(stompClient: StompClient) {
+        stompClient.lifecycle()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe { event ->
+                when (event.type) {
+                    OPENED -> d("Stomp connection opened")
 
-            ERROR -> e("Stomp error : " + event.exception)
+                    ERROR -> e("Stomp error : " + event.exception)
 
-            CLOSED -> d("Stomp connection closed")
+                    CLOSED -> d("Stomp connection closed")
 
-            else -> e("Stomp failed server heartbeat")
-        }
+                    else -> e("Stomp failed server heartbeat")
+                }
+            }
     }
 }
