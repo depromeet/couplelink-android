@@ -2,11 +2,16 @@ package com.desertfox.couplelink.chatting
 
 import android.os.Bundle
 import android.text.TextUtils
+import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.desertfox.couplelink.BaseActivity
 import com.desertfox.couplelink.R
+import com.desertfox.couplelink.adapter.ChatRecyclerViewAdapter
+import com.desertfox.couplelink.model.responses.ChatModel
+import com.desertfox.couplelink.model.responses.MsgModel
+import com.desertfox.couplelink.model.responses.WriterModel
 import com.desertfox.couplelink.network.StompUrl
 import com.desertfox.couplelink.util.StompUtil
-import com.desertfox.couplelink.util.toast
 import io.reactivex.CompletableTransformer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -16,6 +21,9 @@ import kotlinx.android.synthetic.main.activity_main.*
 import ua.naiksoftware.stomp.Stomp
 
 class MainActivity : BaseActivity() {
+    private val chatAdapter by lazy {
+        ChatRecyclerViewAdapter()
+    }
     private val stompClient by lazy {
         Stomp.over(Stomp.ConnectionProvider.OKHTTP, StompUrl.OPEN_STOMP)
     }
@@ -32,6 +40,12 @@ class MainActivity : BaseActivity() {
 
     private fun initView() {
         setSupportActionBar(toolbar_main)
+        rv_main.adapter = chatAdapter
+
+        val layoutManager = LinearLayoutManager(this)
+        layoutManager.stackFromEnd = true // 아이템이 bottom to top으로 쌓이도록 설정
+        layoutManager.reverseLayout = false
+        rv_main.layoutManager = layoutManager
 
         ib_main_send.setOnClickListener {
             val msg = et_main_input_msg.text
@@ -52,9 +66,21 @@ class MainActivity : BaseActivity() {
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ msg ->
-                toast("receive msg successfully : " + msg.payload)
+                Toast.makeText(this, "receive msg successfully : " + msg.payload, Toast.LENGTH_LONG).show()
+                chatAdapter.addItem(
+                    ChatModel(
+                        MsgModel(
+                            "createdAt", 0, msg.payload,
+                            WriterModel(
+                                "0", 0, 0,
+                                "name", "profileUrl", "status"
+                            )
+                        ), MsgType.YOURS
+                    )
+                )
+                rv_main.scrollToPosition(chatAdapter.itemCount - 1)
             }, { t ->
-                toast(t.message.toString())
+                Toast.makeText(this, t.message.toString(), Toast.LENGTH_LONG).show()
             })
 
         compositeDisposable!!.add(dispTopic)
@@ -66,10 +92,22 @@ class MainActivity : BaseActivity() {
             stompClient.send(StompUrl.sendMsg(0, 0), msg)
                 .compose(applySchedulers())
                 .subscribe({
-                    toast("send msg successfully")
-                    // 리스트에 MsgType.MINE 타입의 메세지를 추가
+                    Toast.makeText(this, "send msg successfully", Toast.LENGTH_LONG).show()
+                    chatAdapter.addItem(
+                        ChatModel(
+                            MsgModel(
+                                "createdAt", 0, msg,
+                                WriterModel(
+                                    "0", 0, 0,
+                                    "name", "profileUrl", "status"
+                                )
+                            ), MsgType.MINE
+                        )
+                    )
+                    et_main_input_msg.text.clear()
+                    rv_main.scrollToPosition(chatAdapter.itemCount - 1)
                 }, { t ->
-                    toast("error : " + t.message)
+                    Toast.makeText(this, t.message, Toast.LENGTH_LONG).show()
                 })
         )
     }
