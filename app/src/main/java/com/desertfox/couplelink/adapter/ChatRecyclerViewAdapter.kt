@@ -18,6 +18,7 @@ class ChatRecyclerViewAdapter
     private val mine = 0
     private val yours = 1
     private val date = 2
+    private var chatStatus = date // 채팅 레이아웃 설정을 위해 마지막 채팅의 타입을 저장
 
     override fun onCreateViewHolder(parent: ViewGroup, type: Int): ViewHolder<MsgModel> = when (type) {
         mine -> {
@@ -49,6 +50,11 @@ class ChatRecyclerViewAdapter
         holder.bind(items[position].msgModel)
     }
 
+    fun addItem(msg: ChatModel) {
+        items.add(msg)
+        notifyItemChanged(items.size - 1)
+    }
+
     fun setList(msg: List<ChatModel>) {
         items.clear()
         items.addAll(msg)
@@ -60,6 +66,7 @@ class ChatRecyclerViewAdapter
 
         override fun bind(item: MsgModel) {
             tvDate.text = item.message
+            chatStatus = date
         }
     }
 
@@ -69,6 +76,13 @@ class ChatRecyclerViewAdapter
 
         override fun bind(item: MsgModel) {
             tvMsg.text = item.message
+
+            if (chatStatus == mine) {
+                // ivProfile.visibility = View.GONE
+            } else {
+                ivProfile.visibility = View.VISIBLE
+                chatStatus = mine
+            }
         }
     }
 
@@ -78,6 +92,13 @@ class ChatRecyclerViewAdapter
 
         override fun bind(item: MsgModel) {
             tvMsg.text = item.message
+
+            if (chatStatus == yours) {
+                // ivProfile.visibility = View.GONE
+            } else {
+                ivProfile.visibility = View.VISIBLE
+                chatStatus = yours
+            }
         }
     }
 }
