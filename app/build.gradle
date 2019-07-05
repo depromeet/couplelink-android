@@ -5,6 +5,14 @@ apply plugin: 'com.google.gms.google-services'
 apply plugin: 'io.fabric'
 
 android {
+    signingConfigs {
+        release {
+            storeFile file('C:\\Users\\image\\OneDrive\\Desktop\\work\\couplelink-android\\keystore.jks')
+            storePassword 'desertfox'
+            keyAlias = 'coupleLink'
+            keyPassword 'desertfox'
+        }
+    }
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.desertfox.couplelink"
@@ -25,9 +33,10 @@ android {
             versionNameSuffix "_test"
         }
         release {
-            debuggable false
+            debuggable true
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
 }
@@ -58,6 +67,8 @@ dependencies {
 
     implementation 'com.google.firebase:firebase-core:16.0.9'
     implementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
+
+    implementation "com.github.bumptech.glide:glide:4.8.0"
 
     implementation group: 'com.kakao.sdk', name: 'usermgmt', version: project.KAKAO_SDK_VERSION
 
