@@ -5,7 +5,7 @@ object StompUrl {
     const val OPEN_STOMP = "$BASE_URL/api/websocket"
 
     fun sendMsg(coupleId: Int, roomId: Int) =
-        String.format("/couples/%d/rooms/%d/messages", coupleId, roomId)
+        String.format("/app/couples/%d/rooms/%d/messages", coupleId, roomId)
 
     fun receiveMsg(coupleId: Int, roomId: Int) =
         String.format("/topic/couples/%d/rooms/%d", coupleId, roomId)
