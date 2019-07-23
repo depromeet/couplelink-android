@@ -18,13 +18,13 @@ object StompUtil {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { event ->
                 when (event.type) {
-                    OPENED -> d("Stomp connection opened")
+                    OPENED -> d("Stomp status : Stomp connection opened")
 
-                    ERROR -> e("Stomp error : " + event.exception)
+                    ERROR -> e("Stomp status : " + event.exception)
 
-                    CLOSED -> d("Stomp connection closed")
+                    CLOSED -> d("Stomp status : Stomp connection closed")
 
-                    else -> e("Stomp failed server heartbeat")
+                    else -> e("Stomp status : Stomp failed server heartbeat")
                 }
             }
     }
