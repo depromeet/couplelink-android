@@ -1,9 +1,6 @@
 package com.desertfox.couplelink
 
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import com.jakewharton.rxbinding3.view.clicks
-import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 

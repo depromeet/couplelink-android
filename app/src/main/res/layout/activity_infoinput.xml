@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/infoinput_profile_imng"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_marginTop="63.8dp"
+        android:layout_marginBottom="17dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/profile_default" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/infoinput_profile_btn"
+        android:layout_width="36.1dp"
+        android:layout_height="36.1dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/infoinput_profile_imng"
+        app:layout_constraintEnd_toEndOf="@id/infoinput_profile_imng"
+        app:srcCompat="@drawable/camera_btn" />
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/infoinput_name_edit"
+        android:layout_width="0dp"
+        android:layout_height="28dp"
+        android:layout_marginStart="33dp"
+        android:layout_marginTop="60.8dp"
+        android:layout_marginEnd="33dp"
+        android:background="@null"
+        android:fontFamily="@font/spoqahansansbold"
+        android:imeOptions="actionDone"
+        android:inputType="text"
+        android:maxLines="1"
+        android:textColor="#9aaaff"
+        android:textSize="19sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/infoinput_profile_imng"
+        tools:text="정진용" />
+
+    <View
+        android:id="@+id/infoinput_name_line"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="30dp"
+        android:background="#24727272"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/infoinput_name_edit" />
+
+
+    <LinearLayout
+        android:id="@+id/infoinput_gender_female_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="@id/infoinput_name_edit"
+        app:layout_constraintTop_toBottomOf="@id/infoinput_name_line">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/infoinput_gender_female_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/spoqahansansbold"
+            android:text="@string/str_female"
+            android:textColor="@color/selector_infoinput_gender_color_txt"
+            android:textSize="19sp" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/infoinput_gender_female_check"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="12dp"
+            app:srcCompat="@drawable/selector_infoinput_gender_color_check" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/infoinput_gender_male_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toEndOf="@id/infoinput_gender_female_btn"
+        app:layout_constraintTop_toBottomOf="@id/infoinput_name_line">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/infoinput_gender_male_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/spoqahansansbold"
+            android:text="@string/str_male"
+            android:textColor="@color/selector_infoinput_gender_color_txt"
+            android:textSize="19sp" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/infoinput_gender_male_check"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="12dp"
+            app:srcCompat="@drawable/selector_infoinput_gender_color_check" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/infoinput_gender_line"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="30dp"
+        android:background="#24727272"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/infoinput_gender_female_btn" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/infoinput_birth_txt"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/spoqahansansregular"
+        android:singleLine="true"
+        android:text="@string/str_infoinput_birth_hint"
+        android:textColor="#a1a1a1"
+        android:textSize="19sp"
+        app:layout_constraintEnd_toEndOf="@id/infoinput_name_edit"
+        app:layout_constraintStart_toStartOf="@id/infoinput_name_edit"
+        app:layout_constraintTop_toBottomOf="@id/infoinput_gender_line" />
+
+    <View
+        android:id="@+id/infoinput_birth_line"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="30dp"
+        android:background="#24727272"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/infoinput_birth_txt" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/infoinput_date_txt"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/spoqahansansregular"
+        android:singleLine="true"
+        android:text="@string/str_infoinput_date_hint"
+        android:textColor="#a1a1a1"
+        android:textSize="19sp"
+        app:layout_constraintEnd_toEndOf="@id/infoinput_name_edit"
+        app:layout_constraintStart_toStartOf="@id/infoinput_name_edit"
+        app:layout_constraintTop_toBottomOf="@id/infoinput_birth_line" />
+
+    <View
+        android:id="@+id/infoinput_date_line"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="30dp"
+        android:background="#24727272"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/infoinput_date_txt" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/infoinput_confirm_btn"
+        android:layout_width="0dp"
+        android:layout_height="98dp"
+        android:background="@drawable/selector_connection_btn"
+        android:fontFamily="@font/spoqahansansregular"
+        android:gravity="center"
+        android:paddingBottom="13.5dp"
+        android:text="@string/str_confirm"
+        android:textColor="#ffffff"
+        android:textSize="22sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
