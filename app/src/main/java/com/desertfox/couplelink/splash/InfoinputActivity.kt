@@ -3,25 +3,29 @@ package com.desertfox.couplelink.splash
 import android.app.DatePickerDialog
 import android.graphics.Color
 import android.os.Bundle
-import android.text.SpannableString
-import android.text.Spanned
-import androidx.core.content.res.ResourcesCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.desertfox.couplelink.BaseActivity
 import com.desertfox.couplelink.R
-import com.desertfox.couplelink.util.CustomTypefaceSpan
+import com.desertfox.couplelink.data.UserData
+import com.desertfox.couplelink.model.request.UpdateCoupleMemberRequest
 import com.desertfox.couplelink.util.coupleLinkApi
+import com.desertfox.couplelink.util.spannableString
 import com.desertfox.couplelink.util.throttleClicks
+import com.desertfox.couplelink.util.toast
 import com.kakao.network.ErrorResult
 import com.kakao.usermgmt.UserManagement
 import com.kakao.usermgmt.callback.MeV2ResponseCallback
 import com.kakao.usermgmt.response.MeV2Response
 import kotlinx.android.synthetic.main.activity_infoinput.*
+import java.text.SimpleDateFormat
 import java.util.*
 
 class InfoinputActivity : BaseActivity() {
 
+
+    private lateinit var gender: Gender
+    private var profileImg = ""
 
     private enum class Gender {
         MALE, FEMALE
@@ -35,16 +39,8 @@ class InfoinputActivity : BaseActivity() {
 
         var dateTextView = infoinput_birth_txt
         val datePickerDialog = DatePickerDialog(this, DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
-
-            val spannableString = SpannableString(String.format("%d년 %d월 %d일", year, month + 1, dayOfMonth))
-            spannableString.setSpan(
-                    CustomTypefaceSpan(ResourcesCompat.getFont(this, R.font.spoqahansansbold)!!),
-                    0,
-                    spannableString.length,
-                    Spanned.SPAN_INCLUSIVE_EXCLUSIVE
-            )
             dateTextView.setTextColor(Color.parseColor("#9aaaff"))
-            dateTextView.text = spannableString
+            dateTextView.text = spannableString(String.format(getString(R.string.str_infoinput_date_format), year, month + 1, dayOfMonth), R.font.spoqahansansbold)
         }, Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH))
 
         infoinput_birth_txt.throttleClicks().subscribe {
@@ -66,19 +62,30 @@ class InfoinputActivity : BaseActivity() {
         }.bind()
 
         infoinput_confirm_btn.throttleClicks().subscribe {
-            //TODO 커플정보 등록 필요
+            val name = infoinput_name_edit.text.toString()
+            val birth = infoinput_birth_txt.text.toString()
+            val date = infoinput_date_txt.text.toString()
+            when {
+                name.isEmpty() -> toast(getString(R.string.str_infoinput_name_hint))
+                birth == getString(R.string.str_infoinput_birth_hint) -> toast(birth)
+                date == getString(R.string.str_infoinput_date_hint) -> toast(date)
+                else -> {
+                    coupleLinkApi.updateCoupleMember(UserData.currentMember?.coupleId
+                            ?: -1, UpdateCoupleMemberRequest(changeDateFormat(birth), gender.name, name, profileImg, changeDateFormat(date)))
+                }
+            }
+
         }.bind()
     }
 
+    private fun changeDateFormat(date: String): String {
+        val strDateFormat = SimpleDateFormat("yyyy년 M월 d일", Locale.getDefault())
+        val serverDateformat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        return serverDateformat.format(strDateFormat.parse(date)).toString()
+    }
+
     private fun init() {
-        val spannableString = SpannableString(resources.getString(R.string.str_infoinput_name_hint))
-        spannableString.setSpan(
-                CustomTypefaceSpan(ResourcesCompat.getFont(this, R.font.spoqahansansregular)!!),
-                0,
-                spannableString.length,
-                Spanned.SPAN_INCLUSIVE_EXCLUSIVE
-        )
-        infoinput_name_edit.hint = spannableString
+        infoinput_name_edit.hint = spannableString(R.string.str_infoinput_name_hint, R.font.spoqahansansregular)
         changeGenderCheck(Gender.FEMALE)
         getProfileImage()
     }
@@ -89,6 +96,7 @@ class InfoinputActivity : BaseActivity() {
         infoinput_gender_male_txt.isSelected = isCheck
         infoinput_gender_female_check.isSelected = !isCheck
         infoinput_gender_female_txt.isSelected = !isCheck
+        this.gender = gender
     }
 
     private fun getProfileImage() {
@@ -100,7 +108,8 @@ class InfoinputActivity : BaseActivity() {
             override fun onSessionClosed(errorResult: ErrorResult) {}
 
             override fun onSuccess(response: MeV2Response) {
-                Glide.with(this@InfoinputActivity).load(response.profileImagePath).apply(RequestOptions.circleCropTransform()).into(infoinput_profile_imng)
+                profileImg = response.profileImagePath
+                Glide.with(this@InfoinputActivity).load(profileImg).apply(RequestOptions.circleCropTransform()).into(infoinput_profile_imng)
             }
         })
     }

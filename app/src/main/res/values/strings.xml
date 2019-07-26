@@ -24,4 +24,10 @@
     <string name="str_infoinput_birth_hint">생일을 입력해주세요.</string>
     <string name="str_infoinput_date_hint">사귄 날짜를 입력해주세요.</string>
     <string name="str_connection_error">*해당하는 코드가 존재하지 않습니다.</string>
+    <string name="str_bannedterm">금지어</string>
+    <string name="str_my_bannedterm">내 금지어</string>
+    <string name="str_partner_bannedterm">상대방 금지어</string>
+    <string name="str_bannedterm_hide">채팅 금지 후 공개</string>
+
+    <string name="str_infoinput_date_format">%d년 %d월 %d일</string>
 </resources>

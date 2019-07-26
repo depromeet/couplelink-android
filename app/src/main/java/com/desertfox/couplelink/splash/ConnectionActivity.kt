@@ -6,12 +6,10 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import android.text.SpannableString
-import android.text.Spanned
-import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
 import com.desertfox.couplelink.BaseActivity
 import com.desertfox.couplelink.R
+import com.desertfox.couplelink.data.UserData
 import com.desertfox.couplelink.model.request.CoupleRequest
 import com.desertfox.couplelink.util.*
 import com.jakewharton.rxbinding3.widget.textChanges
@@ -29,21 +27,14 @@ class ConnectionActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_connection)
 
-        coupleLinkApi.getMe().subscribe({
+        coupleLinkApi.getMe().observeOn(AndroidSchedulers.mainThread()).subscribe({
             connection_mycode.text = it.connectionNumber
+            UserData.currentMember = it
         }, {
             e(it.message.toString())
         }).bind()
 
-
-        val spannableString = SpannableString(resources.getString(R.string.str_connection_othercode_hint))
-        spannableString.setSpan(
-                CustomTypefaceSpan(ResourcesCompat.getFont(this, R.font.spoqahansanslight)!!),
-                0,
-                spannableString.length,
-                Spanned.SPAN_INCLUSIVE_EXCLUSIVE
-        )
-        connection_othercode_edit.hint = spannableString
+        connection_othercode_edit.hint = spannableString(R.string.str_connection_othercode_hint, R.font.spoqahansanslight)
 
         connection_mycode.throttleClicks().subscribe {
             val clipboardManager = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
@@ -69,7 +60,7 @@ class ConnectionActivity : BaseActivity() {
                 it.printStackTrace()
                 if (it.message.orEmpty().contains("404")) {
                     changeOtherStatus(OtherStatus.ERROR)
-                } else if(it.message.orEmpty().contains("400")){ //TODO 임시조치
+                } else if (it.message.orEmpty().contains("400")) { //TODO 임시조치
                     startActivity(Intent(this@ConnectionActivity, InfoinputActivity::class.java))
                     finish()
                 }
