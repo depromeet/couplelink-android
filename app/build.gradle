@@ -10,6 +10,13 @@ android {
             storePassword 'desertfox'
             keyAlias = 'coupleLink'
             keyPassword 'desertfox'
+            storeFile file('C:\\Users\\image\\Desktop\\work\\couplelink-android\\keystore.jks')
+        }
+        debug {
+            storePassword 'desertfox'
+            keyAlias = 'coupleLink'
+            keyPassword 'desertfox'
+            storeFile file('C:\\Users\\image\\Desktop\\work\\couplelink-android\\keystore.jks')
         }
     }
     compileSdkVersion 28
@@ -31,7 +38,7 @@ android {
             versionNameSuffix "_test"
         }
         release {
-            debuggable true
+            debuggable false
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
