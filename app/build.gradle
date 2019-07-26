@@ -7,7 +7,6 @@ apply plugin: 'io.fabric'
 android {
     signingConfigs {
         release {
-            storeFile file('C:\\Users\\image\\OneDrive\\Desktop\\work\\couplelink-android\\keystore.jks')
             storePassword 'desertfox'
             keyAlias = 'coupleLink'
             keyPassword 'desertfox'
