@@ -62,7 +62,7 @@ class BannedAdapter(private val callback: Callback) : RecyclerView.Adapter<BaseR
                 else Item(ViewType.PARTNER, it)
             }
         })
-        items.add(Item(ViewType.ADD, null))
+        if (isMy) items.add(Item(ViewType.ADD, null))
         notifyDataSetChanged()
     }
 
