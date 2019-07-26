@@ -63,7 +63,6 @@ class LoginActivity : BaseActivity() {
                                                     } else {
                                                         startActivity(Intent(this@LoginActivity, MainActivity::class.java))
                                                     }
-
                                                     finish()
                                                 }, { e ->
                                                     e.printStackTrace()

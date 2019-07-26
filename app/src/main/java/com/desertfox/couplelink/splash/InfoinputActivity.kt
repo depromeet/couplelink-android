@@ -73,8 +73,7 @@ class InfoinputActivity : BaseActivity() {
                 birth == getString(R.string.str_infoinput_birth_hint) -> toast(birth)
                 date == getString(R.string.str_infoinput_date_hint) -> toast(date)
                 else -> {
-                    coupleLinkApi.updateCoupleMember(UserData.myMemberModel.coupleId
-                            ?: -1, UpdateCoupleMemberRequest(changeDateFormat(birth), gender.name, name, profileImg, changeDateFormat(date)))
+                    coupleLinkApi.updateCoupleMember(UserData.myMemberModel.coupleId, UpdateCoupleMemberRequest(changeDateFormat(birth), gender.name, name, profileImg, changeDateFormat(date)))
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe({
                                 UserData.currentCouple = it
