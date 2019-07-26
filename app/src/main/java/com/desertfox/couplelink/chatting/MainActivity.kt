@@ -109,22 +109,6 @@ class MainActivity : BaseActivity() {
                         MsgType.YOURS
                     }
                 )
-                val dispTopic = stompClient.topic(StompUrl.receiveMsg(0, 0))
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe({ msg ->
-                        val msgItem = gson.fromJson<MsgModel>(msg.payload, MsgModel::class.java)
-                        val chatItem = ChatModel(
-                            msgItem,
-                            if (msgItem.writer == null) MsgType.MINE else MsgType.YOURS
-                        )
-
-                        chatAdapter.addItem(chatItem)
-                        rv_main.scrollToPosition(chatAdapter.itemCount - 1)
-                    }, { t ->
-                        t.printStackTrace()
-                        Toast.makeText(this, t.message.toString(), Toast.LENGTH_LONG).show()
-                    })
                 chatAdapter.addItem(chatItem)
                 rv_main.scrollToPosition(chatAdapter.itemCount - 1)
             }, { t ->

@@ -46,9 +46,9 @@ class BannedActivity : BaseActivity() {
     }
 
     private fun getBanneds(userId: Int) {
-        coupleLinkApi.getBannedTerms(UserData.myMemberModel.coupleId).observeOn(AndroidSchedulers.mainThread())
+        coupleLinkApi.getBannedTerms(UserData.myMemberModel.coupleId, userId).observeOn(AndroidSchedulers.mainThread())
             .subscribe({
-                bannedAdapter.setData(it, true)
+                bannedAdapter.setData(it, UserData.myMemberModel.id == userId)
             }, {
             it.printStackTrace()
         }).bind()

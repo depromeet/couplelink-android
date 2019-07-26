@@ -140,7 +140,7 @@ class InfoinputActivity : BaseActivity() {
             override fun onSessionClosed(errorResult: ErrorResult) {}
 
             override fun onSuccess(response: MeV2Response) {
-                if (profileImg != "") {
+                if (response.profileImagePath != "") {
                     profileImg = response.profileImagePath
                     Glide.with(this@InfoinputActivity).load(profileImg)
                         .apply(RequestOptions.circleCropTransform())

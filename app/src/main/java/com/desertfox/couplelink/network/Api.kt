@@ -46,15 +46,15 @@ interface Api {
     fun readCookie(@Path("coupleId") coupleId: Int, @Path("cookieId") cookieId: Int): Single<FortuneCookieModel>
 
     @GET("/api/couples/{coupleId}/banned-terms")
-    fun getBannedTerms(@Path("coupleId") coupleId: Int, @Query("size") page: Int = 100000): Single<List<BannedTermModel>>
+    fun getBannedTerms(@Path("coupleId") coupleId: Int, @Query("writerId") writerId: Int, @Query("size") page: Int = 1000): Single<List<BannedTermModel>>
 
     @POST("/api/couples/{coupleId}/banned-terms")
     fun createBannedTerm(@Path("coupleId") coupleId: Int, @Body bannedTermRequest: BannedTermRequest): Single<BannedTermModel>
 
     @GET("/api/couples/{coupleId}/banned-terms/{bannedTermId}")
-    fun getBannedTerm(@Path("coupleId") coupleId: Int, @Path("bannedTermId ") bannedTermId: Int): Single<BannedTermModel>
+    fun getBannedTerm(@Path("coupleId") coupleId: Int, @Path("bannedTermId") bannedTermId: Int): Single<BannedTermModel>
 
     @DELETE("/api/couples/{coupleId}/banned-terms/{bannedTermId}")
-    fun deleteBannedTerm(@Path("coupleId") coupleId: Int, @Path("bannedTermId ") bannedTermId: Int): Single<Response<ResponseBody>>
+    fun deleteBannedTerm(@Path("coupleId") coupleId: Int, @Path("bannedTermId") bannedTermId: Int): Single<Response<ResponseBody>>
 
 }
