@@ -11,13 +11,19 @@ import com.desertfox.couplelink.BaseActivity
 import com.desertfox.couplelink.R
 import com.desertfox.couplelink.data.UserData
 import com.desertfox.couplelink.model.request.CoupleRequest
-import com.desertfox.couplelink.util.*
+import com.desertfox.couplelink.model.responses.MemberModel
+import com.desertfox.couplelink.util.coupleLinkApi
+import com.desertfox.couplelink.util.spannableString
+import com.desertfox.couplelink.util.throttleClicks
+import com.desertfox.couplelink.util.toast
 import com.jakewharton.rxbinding3.widget.textChanges
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_connection.*
 
 
 class ConnectionActivity : BaseActivity() {
+
+    private lateinit var currentMember: MemberModel
 
     private enum class OtherStatus {
         NORMAL, SELECT, ERROR
@@ -27,13 +33,14 @@ class ConnectionActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_connection)
 
-        coupleLinkApi.getMe().observeOn(AndroidSchedulers.mainThread()).subscribe({
-            connection_mycode.text = it.connectionNumber
-            UserData.currentMember = it
-        }, {
-            e(it.message.toString())
-        }).bind()
+        UserData.currentMember?.apply {
+            currentMember = this
+        } ?: apply {
+            toast("값이읎쪄")
+            return finish()
+        }
 
+        connection_mycode.text = currentMember.connectionNumber
         connection_othercode_edit.hint = spannableString(R.string.str_connection_othercode_hint, R.font.spoqahansanslight)
 
         connection_mycode.throttleClicks().subscribe {

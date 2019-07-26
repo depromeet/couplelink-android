@@ -46,7 +46,7 @@ interface Api {
     fun readCookie(@Path("coupleId") coupleId: Int, @Path("cookieId") cookieId: Int): Single<FortuneCookieModel>
 
     @GET("/api/couples/{coupleId}/banned-terms")
-    fun getBannedTerms(@Path("coupleId") coupleId: Int, @Query("page") page: Int = 0): Single<List<BannedTermModel>>
+    fun getBannedTerms(@Path("coupleId") coupleId: Int, @Query("size") page: Int = 100000): Single<List<BannedTermModel>>
 
     @POST("/api/couples/{coupleId}/banned-terms")
     fun createBannedTerm(@Path("coupleId") coupleId: Int, @Body bannedTermRequest: BannedTermRequest): Single<BannedTermModel>
