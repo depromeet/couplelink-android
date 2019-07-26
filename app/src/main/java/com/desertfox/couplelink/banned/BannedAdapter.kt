@@ -58,7 +58,7 @@ class BannedAdapter(private val callback: Callback) : RecyclerView.Adapter<BaseR
         items.addAll(models.map {
             if (isMy) Item(ViewType.MY, it)
             else {
-                if (it.count >= 10) Item(ViewType.HIDE, it)
+                if (it.count <= 10) Item(ViewType.HIDE, it)
                 else Item(ViewType.PARTNER, it)
             }
         })

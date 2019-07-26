@@ -1,6 +1,13 @@
 package com.desertfox.couplelink.adapter
 
 import android.content.Context
+import android.graphics.Color
+import android.graphics.Typeface
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
+import android.text.style.RelativeSizeSpan
+import android.text.style.StyleSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,6 +24,7 @@ import kotlinx.android.synthetic.main.item_chat_date.view.*
 import kotlinx.android.synthetic.main.item_chat_mine.view.*
 import kotlinx.android.synthetic.main.item_chat_yours.view.*
 
+
 class ChatRecyclerViewAdapter(private val context: Context) : RecyclerView.Adapter<ViewHolder<MsgModel>>() {
     private var items = mutableListOf<ChatModel>()
     private val mine = 0
@@ -26,17 +34,17 @@ class ChatRecyclerViewAdapter(private val context: Context) : RecyclerView.Adapt
     override fun onCreateViewHolder(parent: ViewGroup, type: Int): ViewHolder<MsgModel> = when (type) {
         mine -> {
             val viewGroup = LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_chat_mine, parent, false)
+                    .inflate(R.layout.item_chat_mine, parent, false)
             MineChatItemViewHolder(viewGroup)
         }
         yours -> {
             val viewGroup = LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_chat_yours, parent, false)
+                    .inflate(R.layout.item_chat_yours, parent, false)
             YoursChatItemViewHolder(viewGroup)
         }
         else -> {
             val viewGroup = LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_chat_date, parent, false)
+                    .inflate(R.layout.item_chat_date, parent, false)
             DateChatItemViewHolder(viewGroup)
         }
     }
@@ -94,11 +102,27 @@ class ChatRecyclerViewAdapter(private val context: Context) : RecyclerView.Adapt
         private val imgPath = UserData.partnerMemberModel.profileImageUrl
 
         override fun bind(item: MsgModel) {
-            tvMsg.text = item.message
+            if (item.bannedIndexRange.isEmpty()) {
+                tvMsg.text = item.message
+            } else {
+                tvMsg.text = item.message.let { content ->
+                    val spannableString = SpannableString(content)
+                    item.bannedIndexRange.forEach {
+                        if (it != null) changeBannedWord(spannableString, it.startIndex, it.endIndex)
+                    }
+                    spannableString
+                }
+            }
             tvTime.text = StringFormatUtil.getTimeString(item.createdAt)
             ivProfile.visibility = View.VISIBLE
             if (imgPath != "")
                 Glide.with(context).load(imgPath).apply(RequestOptions.circleCropTransform()).into(ivProfile)
         }
+    }
+
+    private fun changeBannedWord(spannableString: SpannableString, start: Int, end: Int) {
+        spannableString.setSpan(ForegroundColorSpan(Color.parseColor("#FF0000")), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        spannableString.setSpan(StyleSpan(Typeface.BOLD), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        spannableString.setSpan(RelativeSizeSpan(1.3f), start, end, SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE)
     }
 }
