@@ -86,22 +86,17 @@ class InfoinputActivity : BaseActivity() {
                 birth == getString(R.string.str_infoinput_birth_hint) -> toast(birth)
                 date == getString(R.string.str_infoinput_date_hint) -> toast(date)
                 else -> {
-                    coupleLinkApi.updateCoupleMember(
-                        UserData.currentMember?.coupleId
-                            ?: -1,
-                        UpdateCoupleMemberRequest(
-                            changeDateFormat(birth),
-                            gender.name,
-                            name,
-                            profileImg,
-                            changeDateFormat(date)
-                        )
-                    ).observeOn(AndroidSchedulers.mainThread()).subscribe({
-                        startActivity(Intent(this@InfoinputActivity, MainActivity::class.java))
-                    }, {
-                        it.printStackTrace()
-                        toast(getString(R.string.str_login_error))
-                    })
+                    coupleLinkApi.updateCoupleMember(UserData.currentMember?.coupleId
+                            ?: -1, UpdateCoupleMemberRequest(changeDateFormat(birth), gender.name, name, profileImg, changeDateFormat(date)))
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe({
+                                UserData.currentCouple = it
+                                startActivity(Intent(this, MainActivity::class.java))
+                                finish()
+                            }, {
+                                it.printStackTrace()
+                                toast(it.message.toString())
+                            }).bind()
                 }
             }
 

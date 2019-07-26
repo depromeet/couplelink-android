@@ -5,14 +5,14 @@ import android.os.Bundle
 import androidx.core.content.edit
 import com.desertfox.couplelink.BaseActivity
 import com.desertfox.couplelink.R
+import com.desertfox.couplelink.chatting.MainActivity
+import com.desertfox.couplelink.data.UserData
 import com.desertfox.couplelink.model.request.LoginRequest
-import com.desertfox.couplelink.util.ACCESS_TOKEN
-import com.desertfox.couplelink.util.coupleLinkApi
-import com.desertfox.couplelink.util.e
-import com.desertfox.couplelink.util.sharedPreferences
+import com.desertfox.couplelink.util.*
 import com.kakao.auth.ISessionCallback
 import com.kakao.auth.Session
 import com.kakao.util.exception.KakaoException
+import io.reactivex.android.schedulers.AndroidSchedulers
 
 
 class LoginActivity : BaseActivity() {
@@ -25,7 +25,6 @@ class LoginActivity : BaseActivity() {
         callback = SessionCallback()
         Session.getCurrentSession().addCallback(callback)
         Session.getCurrentSession().checkAndImplicitOpen()
-
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -45,15 +44,38 @@ class LoginActivity : BaseActivity() {
 
         override fun onSessionOpened() {
             coupleLinkApi.login(LoginRequest(Session.getCurrentSession().tokenInfo.accessToken))
-                .subscribe({
-                    sharedPreferences().edit {
-                        putString(ACCESS_TOKEN, it.accessToken)
-                    }
-                    startActivity(Intent(this@LoginActivity, ConnectionActivity::class.java))
-                    finish()
-                }, {
-                    e(it.toString())
-                }).bind()
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe({
+                        sharedPreferences().edit {
+                            putString(ACCESS_TOKEN, it.accessToken)
+                        }
+                        coupleLinkApi.getMe()
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe({
+                                    UserData.currentMember = it
+                                    if (it.status == "COUPLE") {
+                                        coupleLinkApi.getCouple(it.coupleId)
+                                                .observeOn(AndroidSchedulers.mainThread())
+                                                .subscribe({ couple ->
+                                                    UserData.currentCouple = couple
+                                                    startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+                                                    finish()
+                                                }, { e ->
+                                                    e.printStackTrace()
+                                                    toast(e.message.toString())
+                                                })
+                                    } else {
+                                        startActivity(Intent(this@LoginActivity, ConnectionActivity::class.java))
+                                        finish()
+                                    }
+                                }, {
+                                    it.printStackTrace()
+                                    toast(it.message.toString())
+                                }).bind()
+                    }, {
+                        it.printStackTrace()
+                        toast(it.message.toString())
+                    }).bind()
         }
 
         override fun onSessionOpenFailed(exception: KakaoException?) {

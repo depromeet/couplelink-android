@@ -28,7 +28,6 @@ android {
     buildTypes {
         debug{
             debuggable true
-            applicationIdSuffix ".test"
             versionNameSuffix "_test"
         }
         release {
