@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.desertfox.couplelink.BaseActivity
 import com.desertfox.couplelink.R
 import com.desertfox.couplelink.adapter.ChatRecyclerViewAdapter
+import com.desertfox.couplelink.data.UserData
 import com.desertfox.couplelink.model.request.MsgRequest
 import com.desertfox.couplelink.model.responses.ChatModel
 import com.desertfox.couplelink.model.responses.MsgModel
@@ -28,6 +29,8 @@ class MainActivity : BaseActivity() {
     private var restPingDisposable: Disposable? = null
     private var compositeDisposable: CompositeDisposable? = null
     private val gson = Gson()
+    private val coupleId = UserData.currentCouple!!.id
+    private val roomId = UserData.currentCouple!!.chatRoom.id
     private val chatAdapter by lazy {
         ChatRecyclerViewAdapter()
     }
@@ -77,19 +80,24 @@ class MainActivity : BaseActivity() {
         stompClient.withClientHeartbeat(1000).withServerHeartbeat(1000)
 
         // 메세지 수신
-        val dispTopic = stompClient.topic(StompUrl.receiveMsg(0, 0))
+        val dispTopic = stompClient.topic(StompUrl.receiveMsg(coupleId, roomId))
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ msg ->
                 val msgItem = gson.fromJson<MsgModel>(msg.payload, MsgModel::class.java)
                 val chatItem = ChatModel(
                     msgItem,
-                    if (msgItem.writer == null) MsgType.MINE else MsgType.YOURS
+                    if (msgItem.writer.name == null) {
+                        MsgType.MINE
+                    } else {
+                        MsgType.YOURS
+                    }
                 )
 
                 chatAdapter.addItem(chatItem)
                 rv_main.scrollToPosition(chatAdapter.itemCount - 1)
             }, { t ->
+                t.printStackTrace()
                 Toast.makeText(this, t.message.toString(), Toast.LENGTH_LONG).show()
             })
 
@@ -98,11 +106,11 @@ class MainActivity : BaseActivity() {
 
     // 메세지 발신
     private fun sendMsg(msg: String) {
-        val msgRequest = MsgRequest(msg)
+        val msgRequest = MsgRequest(UserData.currentMember!!.id, msg)
 
         compositeDisposable?.add(
             stompClient.send(
-                StompUrl.sendMsg(0, 0),
+                StompUrl.sendMsg(coupleId, roomId),
                 gson.toJson(msgRequest).toString()
             ).compose(applySchedulers())
                 .subscribe({

@@ -87,7 +87,7 @@ class InfoinputActivity : BaseActivity() {
                 date == getString(R.string.str_infoinput_date_hint) -> toast(date)
                 else -> {
                     coupleLinkApi.updateCoupleMember(
-                        UserData.currentMember?.coupleId
+                        UserData.myMemberModel.coupleId
                             ?: -1,
                         UpdateCoupleMemberRequest(
                             changeDateFormat(birth),
@@ -114,8 +114,8 @@ class InfoinputActivity : BaseActivity() {
 
     private fun changeDateFormat(date: String): String {
         val strDateFormat = SimpleDateFormat("yyyy년 M월 d일", Locale.getDefault())
-        val serverDateformat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-        return serverDateformat.format(strDateFormat.parse(date)).toString()
+        val serverDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        return serverDateFormat.format(strDateFormat.parse(date)).toString()
     }
 
     private fun init() {

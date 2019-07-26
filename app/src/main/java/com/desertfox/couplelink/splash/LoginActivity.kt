@@ -58,7 +58,22 @@ class LoginActivity : BaseActivity() {
                                                 .observeOn(AndroidSchedulers.mainThread())
                                                 .subscribe({ couple ->
                                                     UserData.currentCouple = couple
-                                                    startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+                                                    if (UserData.myMemberModel.name.isEmpty()) {
+                                                        startActivity(
+                                                            Intent(
+                                                                this@LoginActivity,
+                                                                ConnectionActivity::class.java
+                                                            )
+                                                        )
+                                                    } else {
+                                                        startActivity(
+                                                            Intent(
+                                                                this@LoginActivity,
+                                                                MainActivity::class.java
+                                                            )
+                                                        )
+                                                    }
+
                                                     finish()
                                                 }, { e ->
                                                     e.printStackTrace()
