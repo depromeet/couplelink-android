@@ -63,8 +63,7 @@
             android:textColor="#727272"
             android:textSize="21sp"
             app:layout_constraintStart_toStartOf="@id/connection_mycode_txt"
-            app:layout_constraintTop_toBottomOf="@id/connection_mycode_txt"
-            tools:text="11080456WUD" />
+            app:layout_constraintTop_toBottomOf="@id/connection_mycode_txt" />
 
         <View
             android:id="@+id/connection_mycode_line"
@@ -83,7 +82,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="27dp"
-            android:text="@string/str_connection_txt"
+            android:text="@string/str_connection_othercode_txt"
             android:textColor="#80727272"
             android:textSize="14sp"
             app:layout_constraintStart_toStartOf="@id/connection_mycode_txt"
@@ -97,6 +96,7 @@
             android:layout_marginEnd="21.3dp"
             android:background="@null"
             android:fontFamily="@font/spoqahansansbold"
+            android:hint="@string/str_connection_othercode_hint"
             android:textSize="21sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@id/connection_mycode_txt"
