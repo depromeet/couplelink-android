@@ -86,17 +86,26 @@ class InfoinputActivity : BaseActivity() {
                 birth == getString(R.string.str_infoinput_birth_hint) -> toast(birth)
                 date == getString(R.string.str_infoinput_date_hint) -> toast(date)
                 else -> {
-                    coupleLinkApi.updateCoupleMember(UserData.currentMember?.coupleId
-                            ?: -1, UpdateCoupleMemberRequest(changeDateFormat(birth), gender.name, name, profileImg, changeDateFormat(date)))
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe({
-                                UserData.currentCouple = it
-                                startActivity(Intent(this, MainActivity::class.java))
-                                finish()
-                            }, {
-                                it.printStackTrace()
-                                toast(it.message.toString())
-                            }).bind()
+                    coupleLinkApi.updateCoupleMember(
+                        UserData.currentMember?.coupleId
+                            ?: -1,
+                        UpdateCoupleMemberRequest(
+                            changeDateFormat(birth),
+                            gender.name,
+                            name,
+                            profileImg,
+                            changeDateFormat(date)
+                        )
+                    )
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe({
+                            UserData.currentCouple = it
+                            startActivity(Intent(this, MainActivity::class.java))
+                            finish()
+                        }, {
+                            it.printStackTrace()
+                            toast(it.message.toString())
+                        }).bind()
                 }
             }
 
@@ -133,8 +142,10 @@ class InfoinputActivity : BaseActivity() {
             override fun onSessionClosed(errorResult: ErrorResult) {}
 
             override fun onSuccess(response: MeV2Response) {
-                profileImg = response.profileImagePath
-                Glide.with(this@InfoinputActivity).load(profileImg).apply(RequestOptions.circleCropTransform())
+                val imgPath = response.profileImagePath
+                Glide.with(this@InfoinputActivity).load(
+                    if (imgPath != null) imgPath else getDrawable(R.drawable.ic_profile)
+                ).apply(RequestOptions.circleCropTransform())
                     .into(infoinput_profile_imng)
             }
         })
