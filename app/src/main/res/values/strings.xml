@@ -2,6 +2,11 @@
     <string name="app_name">CoupleLink</string>
     <string name="kakao_app_key">2c6cecef21fe51e4de395eee9a0a4bc0</string>
 
+    <string name="menu_capsule">캡슐쪽지</string>
+    <string name="menu_ban">금지어</string>
+    <string name="menu_setting">설정</string>
+    <string name="menu_my_page">마이페이지</string>
+
     <string name="str_confirm">완료</string>
 
     <string name="str_splash_title">COUPLELINK</string>
