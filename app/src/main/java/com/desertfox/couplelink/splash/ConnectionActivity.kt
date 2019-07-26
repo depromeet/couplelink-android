@@ -61,6 +61,7 @@ class ConnectionActivity : BaseActivity() {
 
         connection_btn.throttleClicks().subscribe {
             coupleLinkApi.createCouple(CoupleRequest(connection_othercode_edit.text.toString())).observeOn(AndroidSchedulers.mainThread()).subscribe({
+                UserData.currentCouple = it
                 startActivity(Intent(this@ConnectionActivity, InfoinputActivity::class.java))
                 finish()
             }, {
