@@ -1,12 +1,14 @@
 package com.desertfox.couplelink.splash
 
 import android.app.DatePickerDialog
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.desertfox.couplelink.BaseActivity
 import com.desertfox.couplelink.R
+import com.desertfox.couplelink.chatting.MainActivity
 import com.desertfox.couplelink.data.UserData
 import com.desertfox.couplelink.model.request.UpdateCoupleMemberRequest
 import com.desertfox.couplelink.util.coupleLinkApi
@@ -17,6 +19,7 @@ import com.kakao.network.ErrorResult
 import com.kakao.usermgmt.UserManagement
 import com.kakao.usermgmt.callback.MeV2ResponseCallback
 import com.kakao.usermgmt.response.MeV2Response
+import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_infoinput.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -38,10 +41,23 @@ class InfoinputActivity : BaseActivity() {
         init()
 
         var dateTextView = infoinput_birth_txt
-        val datePickerDialog = DatePickerDialog(this, DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
-            dateTextView.setTextColor(Color.parseColor("#9aaaff"))
-            dateTextView.text = spannableString(String.format(getString(R.string.str_infoinput_date_format), year, month + 1, dayOfMonth), R.font.spoqahansansbold)
-        }, Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH))
+        val datePickerDialog = DatePickerDialog(
+            this,
+            DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
+                dateTextView.setTextColor(Color.parseColor("#9aaaff"))
+                dateTextView.text = spannableString(
+                    String.format(
+                        getString(R.string.str_infoinput_date_format),
+                        year,
+                        month + 1,
+                        dayOfMonth
+                    ), R.font.spoqahansansbold
+                )
+            },
+            Calendar.getInstance().get(Calendar.YEAR),
+            Calendar.getInstance().get(Calendar.MONTH),
+            Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
+        )
 
         infoinput_birth_txt.throttleClicks().subscribe {
             dateTextView = infoinput_birth_txt
@@ -70,8 +86,22 @@ class InfoinputActivity : BaseActivity() {
                 birth == getString(R.string.str_infoinput_birth_hint) -> toast(birth)
                 date == getString(R.string.str_infoinput_date_hint) -> toast(date)
                 else -> {
-                    coupleLinkApi.updateCoupleMember(UserData.currentMember?.coupleId
-                            ?: -1, UpdateCoupleMemberRequest(changeDateFormat(birth), gender.name, name, profileImg, changeDateFormat(date)))
+                    coupleLinkApi.updateCoupleMember(
+                        UserData.currentMember?.coupleId
+                            ?: -1,
+                        UpdateCoupleMemberRequest(
+                            changeDateFormat(birth),
+                            gender.name,
+                            name,
+                            profileImg,
+                            changeDateFormat(date)
+                        )
+                    ).observeOn(AndroidSchedulers.mainThread()).subscribe({
+                        startActivity(Intent(this@InfoinputActivity, MainActivity::class.java))
+                    }, {
+                        it.printStackTrace()
+                        toast(getString(R.string.str_login_error))
+                    })
                 }
             }
 
@@ -109,7 +139,8 @@ class InfoinputActivity : BaseActivity() {
 
             override fun onSuccess(response: MeV2Response) {
                 profileImg = response.profileImagePath
-                Glide.with(this@InfoinputActivity).load(profileImg).apply(RequestOptions.circleCropTransform()).into(infoinput_profile_imng)
+                Glide.with(this@InfoinputActivity).load(profileImg).apply(RequestOptions.circleCropTransform())
+                    .into(infoinput_profile_imng)
             }
         })
     }
