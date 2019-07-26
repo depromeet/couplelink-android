@@ -58,8 +58,8 @@ class LoginActivity : BaseActivity() {
                                                 .observeOn(AndroidSchedulers.mainThread())
                                                 .subscribe({ couple ->
                                                     UserData.currentCouple = couple
-                                                    if (UserData.myMemberModel.name.isEmpty()) {
-                                                        startActivity(Intent(this@LoginActivity, ConnectionActivity::class.java))
+                                                    if (UserData.myMemberModel.name.isNullOrEmpty()) {
+                                                        startActivity(Intent(this@LoginActivity, InfoinputActivity::class.java))
                                                     } else {
                                                         startActivity(Intent(this@LoginActivity, MainActivity::class.java))
                                                     }
