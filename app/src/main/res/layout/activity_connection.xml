@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/sub_bg"
+    android:orientation="vertical"
+    tools:context=".BaseActivity">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="89dp"
+        android:fontFamily="@font/righteousregular"
+        android:shadowColor="#7af87fec"
+        android:shadowDy="2"
+        android:shadowRadius="6"
+        android:text="@string/str_splash_title"
+        android:textColor="#fff"
+        android:textSize="36sp" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="82dp"
+        android:layout_marginEnd="15dp"
+        android:background="@drawable/connection_content_bg">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/connection_signup_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="18dp"
+            android:layout_marginTop="24dp"
+            android:fontFamily="@font/spoqahansanslight"
+            android:text="SIGN UP"
+            android:textColor="#80727272"
+            android:textSize="26sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/connection_mycode_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="21.3dp"
+            android:layout_marginTop="35dp"
+            android:text="@string/str_connection_txt"
+            android:textColor="#80727272"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/connection_signup_txt" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/connection_mycode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/spoqahansansbold"
+            android:textColor="#727272"
+            android:textSize="21sp"
+            app:layout_constraintStart_toStartOf="@id/connection_mycode_txt"
+            app:layout_constraintTop_toBottomOf="@id/connection_mycode_txt"
+            tools:text="11080456WUD" />
+
+        <View
+            android:id="@+id/connection_mycode_line"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginStart="18.3dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="18.3dp"
+            android:background="#24727272"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/connection_mycode" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/connection_othercode_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="27dp"
+            android:text="@string/str_connection_txt"
+            android:textColor="#80727272"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="@id/connection_mycode_txt"
+            app:layout_constraintTop_toBottomOf="@id/connection_mycode_line" />
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/connection_othercode_edit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="21.3dp"
+            android:background="@null"
+            android:fontFamily="@font/spoqahansansbold"
+            android:textSize="21sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/connection_mycode_txt"
+            app:layout_constraintTop_toBottomOf="@id/connection_othercode_txt" />
+
+        <View
+            android:id="@+id/connection_othercode_line"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginStart="18.3dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="18.3dp"
+            android:background="#24727272"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/connection_othercode_edit" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/connection_othercode_error"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:fontFamily="@font/spoqahansansregular"
+            android:text="@string/str_connection_error"
+            android:textColor="#ff829a"
+            android:textSize="11sp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="@id/connection_othercode_line"
+            app:layout_constraintTop_toBottomOf="@id/connection_othercode_line" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/connection_btn"
+            android:layout_width="0dp"
+            android:layout_height="98dp"
+            android:background="@drawable/selector_connection_btn"
+            android:fontFamily="@font/spoqahansansregular"
+            android:gravity="center"
+            android:paddingBottom="13.5dp"
+            android:text="@string/str_connection"
+            android:textColor="#ffffff"
+            android:textSize="22sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</LinearLayout>

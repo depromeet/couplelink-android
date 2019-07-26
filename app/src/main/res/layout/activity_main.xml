@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorGrayBackground"
+    android:animateLayoutChanges="true"
     tools:context="com.desertfox.couplelink.chatting.MainActivity">
 
     <androidx.appcompat.widget.Toolbar
@@ -61,6 +62,7 @@
         app:layout_constraintTop_toBottomOf="@id/toolbar_main">
 
         <Button
+            android:id="@+id/main_capsule_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -74,6 +76,7 @@
             android:textStyle="bold" />
 
         <Button
+            android:id="@+id/main_banned_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -87,6 +90,7 @@
             android:textStyle="bold" />
 
         <Button
+            android:id="@+id/main_setting_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -100,6 +104,7 @@
             android:textStyle="bold" />
 
         <Button
+            android:id="@+id/main_mypage_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"

@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginStart="50dp"
+    android:layout_marginTop="5dp"
     android:layout_marginEnd="10dp"
     android:layout_marginBottom="5dp">
 
@@ -16,10 +17,10 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        android:id="@+id/tv_chat_mine_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="5dp"
-        android:text="오후 1:13"
         android:textColor="@color/colorGrayTimeText"
         android:textSize="10dp"
         app:layout_constraintBottom_toBottomOf="parent"

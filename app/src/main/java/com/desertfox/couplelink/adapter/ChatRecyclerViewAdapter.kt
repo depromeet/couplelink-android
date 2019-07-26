@@ -8,6 +8,7 @@ import com.desertfox.couplelink.R
 import com.desertfox.couplelink.chatting.MsgType
 import com.desertfox.couplelink.model.responses.ChatModel
 import com.desertfox.couplelink.model.responses.MsgModel
+import com.desertfox.couplelink.util.StringFormatUtil
 import kotlinx.android.synthetic.main.item_chat_date.view.*
 import kotlinx.android.synthetic.main.item_chat_mine.view.*
 import kotlinx.android.synthetic.main.item_chat_yours.view.*
@@ -18,7 +19,6 @@ class ChatRecyclerViewAdapter
     private val mine = 0
     private val yours = 1
     private val date = 2
-    private var chatStatus = date // 채팅 레이아웃 설정을 위해 마지막 채팅의 타입을 저장
 
     override fun onCreateViewHolder(parent: ViewGroup, type: Int): ViewHolder<MsgModel> = when (type) {
         mine -> {
@@ -65,40 +65,33 @@ class ChatRecyclerViewAdapter
         private val tvDate by lazy { itemView.tv_chat_date }
 
         override fun bind(item: MsgModel) {
-            tvDate.text = item.message
-            chatStatus = date
+            tvDate.text = StringFormatUtil.getDateString(item.createdAt)
         }
     }
 
     inner class MineChatItemViewHolder(view: View) : ViewHolder<MsgModel>(view) {
         private val tvMsg by lazy { itemView.tv_chat_mine }
+        private val tvTime by lazy { itemView.tv_chat_mine_time }
         private val ivProfile by lazy { itemView.iv_profile_mine }
 
         override fun bind(item: MsgModel) {
             tvMsg.text = item.message
-
-            if (chatStatus == mine) {
-                // ivProfile.visibility = View.GONE
-            } else {
-                ivProfile.visibility = View.VISIBLE
-                chatStatus = mine
-            }
+            tvTime.text = StringFormatUtil.getTimeString(
+                StringFormatUtil.parseLocalDateTime(item.createdAt)
+            )
+            ivProfile.visibility = View.VISIBLE
         }
     }
 
     inner class YoursChatItemViewHolder(view: View) : ViewHolder<MsgModel>(view) {
         private val tvMsg by lazy { itemView.tv_chat_yours }
+        private val tvTime by lazy { itemView.tv_chat_yours_time }
         private val ivProfile by lazy { itemView.iv_profile_yours }
 
         override fun bind(item: MsgModel) {
             tvMsg.text = item.message
-
-            if (chatStatus == yours) {
-                // ivProfile.visibility = View.GONE
-            } else {
-                ivProfile.visibility = View.VISIBLE
-                chatStatus = yours
-            }
+            tvTime.text = StringFormatUtil.getTimeString(item.createdAt)
+            ivProfile.visibility = View.VISIBLE
         }
     }
 }
