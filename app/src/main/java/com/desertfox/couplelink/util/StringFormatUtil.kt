@@ -1,7 +1,5 @@
 package com.desertfox.couplelink.util
 
-import android.util.Log
-
 
 object StringFormatUtil {
 
@@ -17,7 +15,6 @@ object StringFormatUtil {
     fun getTimeString(localDateTime: String): String {
         val formattedDate = parseLocalDateTime(localDateTime)
         val time = formattedDate.split("-")
-        Log.d("time", time[0] + " " + time[1])
         val hour = time[3].toInt()
         val minute = time[4].toInt()
 

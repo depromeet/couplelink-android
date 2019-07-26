@@ -1,5 +1,6 @@
 package com.desertfox.couplelink.chatting
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
@@ -9,12 +10,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.desertfox.couplelink.BaseActivity
 import com.desertfox.couplelink.R
 import com.desertfox.couplelink.adapter.ChatRecyclerViewAdapter
+import com.desertfox.couplelink.banned.BannedActivity
 import com.desertfox.couplelink.data.UserData
 import com.desertfox.couplelink.model.request.MsgRequest
 import com.desertfox.couplelink.model.responses.ChatModel
 import com.desertfox.couplelink.model.responses.MsgModel
 import com.desertfox.couplelink.network.StompUrl
 import com.desertfox.couplelink.util.StompUtil
+import com.desertfox.couplelink.util.throttleClicks
+import com.desertfox.couplelink.util.toast
 import com.google.gson.Gson
 import io.reactivex.CompletableTransformer
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -43,6 +47,18 @@ class MainActivity : BaseActivity() {
 
         initView()
         initStomp()
+        main_banned_btn.throttleClicks().subscribe {
+            startActivity(Intent(this, BannedActivity::class.java))
+        }.bind()
+        main_capsule_btn.throttleClicks().subscribe {
+            toast("준비중입니다.")
+        }.bind()
+        main_setting_btn.throttleClicks().subscribe {
+            toast("준비중입니다.")
+        }.bind()
+        main_mypage_btn.throttleClicks().subscribe {
+            toast("준비중입니다.")
+        }.bind()
     }
 
     private fun initView() {
@@ -93,11 +109,25 @@ class MainActivity : BaseActivity() {
                         MsgType.YOURS
                     }
                 )
+                val dispTopic = stompClient.topic(StompUrl.receiveMsg(0, 0))
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe({ msg ->
+                        val msgItem = gson.fromJson<MsgModel>(msg.payload, MsgModel::class.java)
+                        val chatItem = ChatModel(
+                            msgItem,
+                            if (msgItem.writer == null) MsgType.MINE else MsgType.YOURS
+                        )
 
+                        chatAdapter.addItem(chatItem)
+                        rv_main.scrollToPosition(chatAdapter.itemCount - 1)
+                    }, { t ->
+                        t.printStackTrace()
+                        Toast.makeText(this, t.message.toString(), Toast.LENGTH_LONG).show()
+                    })
                 chatAdapter.addItem(chatItem)
                 rv_main.scrollToPosition(chatAdapter.itemCount - 1)
             }, { t ->
-                t.printStackTrace()
                 Toast.makeText(this, t.message.toString(), Toast.LENGTH_LONG).show()
             })
 

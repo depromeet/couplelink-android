@@ -26,7 +26,6 @@ import java.util.*
 
 class InfoinputActivity : BaseActivity() {
 
-
     private lateinit var gender: Gender
     private var profileImg = ""
 
@@ -141,11 +140,12 @@ class InfoinputActivity : BaseActivity() {
             override fun onSessionClosed(errorResult: ErrorResult) {}
 
             override fun onSuccess(response: MeV2Response) {
-                val imgPath = response.profileImagePath
-                Glide.with(this@InfoinputActivity).load(
-                    if (imgPath != null) imgPath else getDrawable(R.drawable.ic_profile)
-                ).apply(RequestOptions.circleCropTransform())
-                    .into(infoinput_profile_imng)
+                if (profileImg != "") {
+                    profileImg = response.profileImagePath
+                    Glide.with(this@InfoinputActivity).load(profileImg)
+                        .apply(RequestOptions.circleCropTransform())
+                        .into(infoinput_profile_imng)
+                }
             }
         })
     }
