@@ -31,9 +31,8 @@ class MainActivity : BaseActivity() {
     private val gson = Gson()
     private val coupleId = UserData.currentCouple!!.id
     private val roomId = UserData.currentCouple!!.chatRoom.id
-    private val chatAdapter by lazy {
-        ChatRecyclerViewAdapter()
-    }
+    private lateinit var chatAdapter: ChatRecyclerViewAdapter
+
     private val stompClient by lazy {
         Stomp.over(Stomp.ConnectionProvider.OKHTTP, StompUrl.OPEN_STOMP)
     }
@@ -49,6 +48,7 @@ class MainActivity : BaseActivity() {
     private fun initView() {
         setSupportActionBar(toolbar_main)
 
+        chatAdapter = ChatRecyclerViewAdapter(this@MainActivity)
         rv_main.adapter = chatAdapter
         rv_main.layoutManager = LinearLayoutManager(this).apply {
             stackFromEnd = true // 아이템이 bottom to top으로 쌓이도록 설정
@@ -87,7 +87,7 @@ class MainActivity : BaseActivity() {
                 val msgItem = gson.fromJson<MsgModel>(msg.payload, MsgModel::class.java)
                 val chatItem = ChatModel(
                     msgItem,
-                    if (msgItem.writer.name == null) {
+                    if (msgItem.writer.id == UserData.myMemberModel.id) {
                         MsgType.MINE
                     } else {
                         MsgType.YOURS

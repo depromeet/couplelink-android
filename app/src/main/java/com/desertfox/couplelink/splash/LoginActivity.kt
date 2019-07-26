@@ -58,11 +58,11 @@ class LoginActivity : BaseActivity() {
                                                 .observeOn(AndroidSchedulers.mainThread())
                                                 .subscribe({ couple ->
                                                     UserData.currentCouple = couple
-                                                    if (UserData.myMemberModel.name.isEmpty()) {
+                                                    if (UserData.myMemberModel.name.isNullOrEmpty()) {
                                                         startActivity(
                                                             Intent(
                                                                 this@LoginActivity,
-                                                                ConnectionActivity::class.java
+                                                                InfoinputActivity::class.java
                                                             )
                                                         )
                                                     } else {
@@ -73,7 +73,6 @@ class LoginActivity : BaseActivity() {
                                                             )
                                                         )
                                                     }
-
                                                     finish()
                                                 }, { e ->
                                                     e.printStackTrace()

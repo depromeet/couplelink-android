@@ -4,7 +4,7 @@ data class MemberModel(
     val connectionNumber: String,
     val coupleId: Int,
     val id: Int,
-    val name: String,
+    val name: String?,
     val profileImageUrl: String,
     val status: String
 )

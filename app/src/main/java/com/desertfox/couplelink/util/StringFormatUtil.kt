@@ -1,10 +1,12 @@
 package com.desertfox.couplelink.util
 
+import android.util.Log
+
 
 object StringFormatUtil {
 
     fun parseLocalDateTime(timestamp: String): String =
-        timestamp.replace("T", "-").replace(":", "-")
+        timestamp.replace(" ", "-").replace(":", "-")
 
     fun getDateString(localDateTime: String): String {
         val formattedDate = parseLocalDateTime(localDateTime)
@@ -15,11 +17,12 @@ object StringFormatUtil {
     fun getTimeString(localDateTime: String): String {
         val formattedDate = parseLocalDateTime(localDateTime)
         val time = formattedDate.split("-")
+        Log.d("time", time[0] + " " + time[1])
         val hour = time[3].toInt()
         val minute = time[4].toInt()
 
         return if (hour > 13) {
-            String.format("오후 %d:%d", hour - 12, minute)
+            String.format("오후 %d:%d", hour % 12, minute)
         } else {
             String.format("오전 %d:%d", hour, minute)
         }

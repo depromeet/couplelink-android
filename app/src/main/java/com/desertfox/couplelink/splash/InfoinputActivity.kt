@@ -87,8 +87,7 @@ class InfoinputActivity : BaseActivity() {
                 date == getString(R.string.str_infoinput_date_hint) -> toast(date)
                 else -> {
                     coupleLinkApi.updateCoupleMember(
-                        UserData.myMemberModel.coupleId
-                            ?: -1,
+                        UserData.myMemberModel.coupleId,
                         UpdateCoupleMemberRequest(
                             changeDateFormat(birth),
                             gender.name,

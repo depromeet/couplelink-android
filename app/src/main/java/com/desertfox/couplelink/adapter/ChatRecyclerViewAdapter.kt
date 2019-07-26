@@ -1,11 +1,15 @@
 package com.desertfox.couplelink.adapter
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.desertfox.couplelink.R
 import com.desertfox.couplelink.chatting.MsgType
+import com.desertfox.couplelink.data.UserData
 import com.desertfox.couplelink.model.responses.ChatModel
 import com.desertfox.couplelink.model.responses.MsgModel
 import com.desertfox.couplelink.util.StringFormatUtil
@@ -13,8 +17,7 @@ import kotlinx.android.synthetic.main.item_chat_date.view.*
 import kotlinx.android.synthetic.main.item_chat_mine.view.*
 import kotlinx.android.synthetic.main.item_chat_yours.view.*
 
-class ChatRecyclerViewAdapter
-    : RecyclerView.Adapter<ViewHolder<MsgModel>>() {
+class ChatRecyclerViewAdapter(private val context: Context) : RecyclerView.Adapter<ViewHolder<MsgModel>>() {
     private var items = mutableListOf<ChatModel>()
     private val mine = 0
     private val yours = 1
@@ -73,13 +76,14 @@ class ChatRecyclerViewAdapter
         private val tvMsg by lazy { itemView.tv_chat_mine }
         private val tvTime by lazy { itemView.tv_chat_mine_time }
         private val ivProfile by lazy { itemView.iv_profile_mine }
+        private val imgPath = UserData.myMemberModel.profileImageUrl
 
         override fun bind(item: MsgModel) {
             tvMsg.text = item.message
-            tvTime.text = StringFormatUtil.getTimeString(
-                StringFormatUtil.parseLocalDateTime(item.createdAt)
-            )
+            tvTime.text = StringFormatUtil.getTimeString(item.createdAt)
             ivProfile.visibility = View.VISIBLE
+            if (imgPath != "")
+                Glide.with(context).load(imgPath).apply(RequestOptions.circleCropTransform()).into(ivProfile)
         }
     }
 
@@ -87,11 +91,14 @@ class ChatRecyclerViewAdapter
         private val tvMsg by lazy { itemView.tv_chat_yours }
         private val tvTime by lazy { itemView.tv_chat_yours_time }
         private val ivProfile by lazy { itemView.iv_profile_yours }
+        private val imgPath = UserData.partnerMemberModel.profileImageUrl
 
         override fun bind(item: MsgModel) {
             tvMsg.text = item.message
             tvTime.text = StringFormatUtil.getTimeString(item.createdAt)
             ivProfile.visibility = View.VISIBLE
+            if (imgPath != "")
+                Glide.with(context).load(imgPath).apply(RequestOptions.circleCropTransform()).into(ivProfile)
         }
     }
 }
