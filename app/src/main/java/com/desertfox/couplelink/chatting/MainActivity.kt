@@ -11,6 +11,7 @@ import com.desertfox.couplelink.BaseActivity
 import com.desertfox.couplelink.R
 import com.desertfox.couplelink.adapter.ChatRecyclerViewAdapter
 import com.desertfox.couplelink.banned.BannedActivity
+import com.desertfox.couplelink.data.UserData
 import com.desertfox.couplelink.model.request.MsgRequest
 import com.desertfox.couplelink.model.responses.ChatModel
 import com.desertfox.couplelink.model.responses.MsgModel
@@ -32,9 +33,10 @@ class MainActivity : BaseActivity() {
     private var restPingDisposable: Disposable? = null
     private var compositeDisposable: CompositeDisposable? = null
     private val gson = Gson()
-    private val chatAdapter by lazy {
-        ChatRecyclerViewAdapter()
-    }
+    private val coupleId = UserData.currentCouple!!.id
+    private val roomId = UserData.currentCouple!!.chatRoom.id
+    private lateinit var chatAdapter: ChatRecyclerViewAdapter
+
     private val stompClient by lazy {
         Stomp.over(Stomp.ConnectionProvider.OKHTTP, StompUrl.OPEN_STOMP)
     }
@@ -62,6 +64,7 @@ class MainActivity : BaseActivity() {
     private fun initView() {
         setSupportActionBar(toolbar_main)
 
+        chatAdapter = ChatRecyclerViewAdapter(this@MainActivity)
         rv_main.adapter = chatAdapter
         rv_main.layoutManager = LinearLayoutManager(this).apply {
             stackFromEnd = true // 아이템이 bottom to top으로 쌓이도록 설정
@@ -93,48 +96,51 @@ class MainActivity : BaseActivity() {
         stompClient.withClientHeartbeat(1000).withServerHeartbeat(1000)
 
         // 메세지 수신
-        val dispTopic = stompClient.topic(StompUrl.receiveMsg(0, 0))
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ msg ->
-                    val msgItem = gson.fromJson<MsgModel>(msg.payload, MsgModel::class.java)
-                    val chatItem = ChatModel(
-                            msgItem,
-                            if (msgItem.writer == null) MsgType.MINE else MsgType.YOURS
-                    )
-
-                    chatAdapter.addItem(chatItem)
-                    rv_main.scrollToPosition(chatAdapter.itemCount - 1)
-                }, { t ->
-                    Toast.makeText(this, t.message.toString(), Toast.LENGTH_LONG).show()
-                })
+        val dispTopic = stompClient.topic(StompUrl.receiveMsg(coupleId, roomId))
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ msg ->
+                val msgItem = gson.fromJson<MsgModel>(msg.payload, MsgModel::class.java)
+                val chatItem = ChatModel(
+                    msgItem,
+                    if (msgItem.writer.id == UserData.myMemberModel.id) {
+                        MsgType.MINE
+                    } else {
+                        MsgType.YOURS
+                    }
+                )
+                chatAdapter.addItem(chatItem)
+                rv_main.scrollToPosition(chatAdapter.itemCount - 1)
+            }, { t ->
+                Toast.makeText(this, t.message.toString(), Toast.LENGTH_LONG).show()
+            })
 
         compositeDisposable!!.add(dispTopic)
     }
 
     // 메세지 발신
     private fun sendMsg(msg: String) {
-        val msgRequest = MsgRequest(msg)
+        val msgRequest = MsgRequest(UserData.currentMember!!.id, msg)
 
         compositeDisposable?.add(
-                stompClient.send(
-                        StompUrl.sendMsg(0, 0),
-                        gson.toJson(msgRequest).toString()
-                ).compose(applySchedulers())
-                        .subscribe({
-                            et_main_input_msg.text.clear()
-                        }, { t ->
-                            Toast.makeText(this, t.message, Toast.LENGTH_LONG).show()
-                        })
+            stompClient.send(
+                StompUrl.sendMsg(coupleId, roomId),
+                gson.toJson(msgRequest).toString()
+            ).compose(applySchedulers())
+                .subscribe({
+                    et_main_input_msg.text.clear()
+                }, { t ->
+                    Toast.makeText(this, t.message, Toast.LENGTH_LONG).show()
+                })
         )
     }
 
     private fun applySchedulers(): CompletableTransformer =
-            CompletableTransformer { upstream ->
-                upstream.unsubscribeOn(Schedulers.newThread())
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-            }
+        CompletableTransformer { upstream ->
+            upstream.unsubscribeOn(Schedulers.newThread())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+        }
 
     private fun initSubscriptions() {
         if (compositeDisposable == null) {

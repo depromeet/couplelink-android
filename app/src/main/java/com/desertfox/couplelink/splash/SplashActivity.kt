@@ -19,7 +19,7 @@ class SplashActivity : BaseActivity() {
             if (!accessToken.isNullOrEmpty()) {
                 startActivity(Intent(this@SplashActivity, ConnectionActivity::class.java))
                 finish()
-            }else{
+            } else {
                 startActivity(Intent(this@SplashActivity, LoginActivity::class.java))
             }
         }.bind()

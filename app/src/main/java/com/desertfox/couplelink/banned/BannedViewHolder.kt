@@ -9,8 +9,12 @@ import com.desertfox.couplelink.util.inflate
 import com.desertfox.couplelink.util.throttleClicks
 import kotlinx.android.synthetic.main.item_bannedterm.*
 
-class BannedViewHolder private constructor(itemView: View,private val callback: BannedAdapter.ContentCallback) : BaseRecyclerViewHolder(itemView) {
-    constructor(parent: ViewGroup, callback: BannedAdapter.ContentCallback) : this(parent.inflate(R.layout.item_bannedterm, false), callback)
+class BannedViewHolder private constructor(itemView: View, private val callback: BannedAdapter.ContentCallback) :
+    BaseRecyclerViewHolder(itemView) {
+    constructor(
+        parent: ViewGroup,
+        callback: BannedAdapter.ContentCallback
+    ) : this(parent.inflate(R.layout.item_bannedterm, false), callback)
 
     override fun onDataBind(data: Any?) {
         if (data !is BannedAdapter.Item) return

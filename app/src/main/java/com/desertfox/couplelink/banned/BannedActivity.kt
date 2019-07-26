@@ -46,15 +46,17 @@ class BannedActivity : BaseActivity() {
     }
 
     private fun getBanneds(userId: Int) {
-        coupleLinkApi.getBannedTerms(UserData.myMemberModel.coupleId, userId).observeOn(AndroidSchedulers.mainThread()).subscribe({
-            bannedAdapter.setData(it, UserData.myMemberModel.id == userId)
-        }, {
+        coupleLinkApi.getBannedTerms(UserData.myMemberModel.coupleId, userId).observeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+                bannedAdapter.setData(it, UserData.myMemberModel.id == userId)
+            }, {
             it.printStackTrace()
         }).bind()
     }
 
     private fun addBanned(word: String) {
-        coupleLinkApi.createBannedTerm(UserData.myMemberModel.coupleId, BannedTermRequest(word)).observeOn(AndroidSchedulers.mainThread()).subscribe({
+        coupleLinkApi.createBannedTerm(UserData.myMemberModel.coupleId, BannedTermRequest(word))
+            .observeOn(AndroidSchedulers.mainThread()).subscribe({
             bannedAdapter.appendData(it)
         }, {
             it.printStackTrace()
@@ -63,7 +65,8 @@ class BannedActivity : BaseActivity() {
     }
 
     private fun deleteBanned(bannedTermId: Int) {
-        coupleLinkApi.deleteBannedTerm(UserData.myMemberModel.coupleId, bannedTermId).observeOn(AndroidSchedulers.mainThread()).subscribe({
+        coupleLinkApi.deleteBannedTerm(UserData.myMemberModel.coupleId, bannedTermId)
+            .observeOn(AndroidSchedulers.mainThread()).subscribe({
             bannedAdapter.deleteData(bannedTermId)
         }, {
             it.printStackTrace()

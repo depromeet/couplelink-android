@@ -41,7 +41,8 @@ class ConnectionActivity : BaseActivity() {
         }
 
         connection_mycode.text = currentMember.connectionNumber
-        connection_othercode_edit.hint = spannableString(R.string.str_connection_othercode_hint, R.font.spoqahansanslight)
+        connection_othercode_edit.hint =
+            spannableString(R.string.str_connection_othercode_hint, R.font.spoqahansanslight)
 
         connection_mycode.throttleClicks().subscribe {
             val clipboardManager = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
@@ -60,19 +61,20 @@ class ConnectionActivity : BaseActivity() {
         }.bind()
 
         connection_btn.throttleClicks().subscribe {
-            coupleLinkApi.createCouple(CoupleRequest(connection_othercode_edit.text.toString())).observeOn(AndroidSchedulers.mainThread()).subscribe({
-                UserData.currentCouple = it
-                startActivity(Intent(this@ConnectionActivity, InfoinputActivity::class.java))
-                finish()
-            }, {
-                it.printStackTrace()
-                if (it.message.orEmpty().contains("404")) {
-                    changeOtherStatus(OtherStatus.ERROR)
-                } else if (it.message.orEmpty().contains("400")) { //TODO 임시조치
+            coupleLinkApi.createCouple(CoupleRequest(connection_othercode_edit.text.toString()))
+                .observeOn(AndroidSchedulers.mainThread()).subscribe({
+                    UserData.currentCouple = it
                     startActivity(Intent(this@ConnectionActivity, InfoinputActivity::class.java))
                     finish()
-                }
-            }).bind()
+                }, {
+                    it.printStackTrace()
+                    if (it.message.orEmpty().contains("404")) {
+                        changeOtherStatus(OtherStatus.ERROR)
+                    } else if (it.message.orEmpty().contains("400")) { //TODO 임시조치
+                        startActivity(Intent(this@ConnectionActivity, InfoinputActivity::class.java))
+                        finish()
+                    }
+                }).bind()
         }.bind()
     }
 

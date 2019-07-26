@@ -1,15 +1,20 @@
 package com.desertfox.couplelink.model.responses
 
 
-import com.google.gson.annotations.SerializedName
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
+@Entity
 data class MsgModel(
-    @SerializedName("createdAt")
+    @ColumnInfo(name = "banned_index_range")
+    val bannedIndexRange: List<IndexRangeModel?>,
+    @ColumnInfo(name = "created_at")
     val createdAt: String,
-    @SerializedName("id")
+    @PrimaryKey
     val id: Int,
-    @SerializedName("message")
+    @ColumnInfo(name = "message")
     val message: String,
-    @SerializedName("writer")
+    @ColumnInfo(name = "writer")
     val writer: WriterModel
 )

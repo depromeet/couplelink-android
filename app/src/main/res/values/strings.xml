@@ -12,10 +12,11 @@
     <string name="str_splash_title">COUPLELINK</string>
     <string name="str_splash_msg">비로소 내 마음이\n당신에게로</string>
 
-
     <string name="str_connection">연결하기</string>
     <string name="str_connection_txt">내 코드</string>
+    <string name="str_connection_othercode_txt">상대방 코드</string>
     <string name="str_connection_othercode_hint">상대방 코드를 입력해주세요.</string>
+    <string name="str_login_error">저장 중 문제가 생겼습니다. 다시 시도해주세요.</string>
 
     <string name="str_male">남성</string>
     <string name="str_female">여성</string>

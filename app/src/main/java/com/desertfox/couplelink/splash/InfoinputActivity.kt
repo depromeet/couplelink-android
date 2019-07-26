@@ -26,7 +26,6 @@ import java.util.*
 
 class InfoinputActivity : BaseActivity() {
 
-
     private lateinit var gender: Gender
     private var profileImg = ""
 
@@ -41,10 +40,23 @@ class InfoinputActivity : BaseActivity() {
         init()
 
         var dateTextView = infoinput_birth_txt
-        val datePickerDialog = DatePickerDialog(this, DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
-            dateTextView.setTextColor(Color.parseColor("#9aaaff"))
-            dateTextView.text = spannableString(String.format(getString(R.string.str_infoinput_date_format), year, month + 1, dayOfMonth), R.font.spoqahansansbold)
-        }, Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH))
+        val datePickerDialog = DatePickerDialog(
+            this,
+            DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
+                dateTextView.setTextColor(Color.parseColor("#9aaaff"))
+                dateTextView.text = spannableString(
+                    String.format(
+                        getString(R.string.str_infoinput_date_format),
+                        year,
+                        month + 1,
+                        dayOfMonth
+                    ), R.font.spoqahansansbold
+                )
+            },
+            Calendar.getInstance().get(Calendar.YEAR),
+            Calendar.getInstance().get(Calendar.MONTH),
+            Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
+        )
 
         infoinput_birth_txt.throttleClicks().subscribe {
             dateTextView = infoinput_birth_txt
@@ -73,16 +85,25 @@ class InfoinputActivity : BaseActivity() {
                 birth == getString(R.string.str_infoinput_birth_hint) -> toast(birth)
                 date == getString(R.string.str_infoinput_date_hint) -> toast(date)
                 else -> {
-                    coupleLinkApi.updateCoupleMember(UserData.myMemberModel.coupleId, UpdateCoupleMemberRequest(changeDateFormat(birth), gender.name, name, profileImg, changeDateFormat(date)))
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe({
-                                UserData.currentCouple = it
-                                startActivity(Intent(this, MainActivity::class.java))
-                                finish()
-                            }, {
-                                it.printStackTrace()
-                                toast(it.message.toString())
-                            }).bind()
+                    coupleLinkApi.updateCoupleMember(
+                        UserData.myMemberModel.coupleId,
+                        UpdateCoupleMemberRequest(
+                            changeDateFormat(birth),
+                            gender.name,
+                            name,
+                            profileImg,
+                            changeDateFormat(date)
+                        )
+                    )
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe({
+                            UserData.currentCouple = it
+                            startActivity(Intent(this, MainActivity::class.java))
+                            finish()
+                        }, {
+                            it.printStackTrace()
+                            toast(it.message.toString())
+                        }).bind()
                 }
             }
 
@@ -119,8 +140,12 @@ class InfoinputActivity : BaseActivity() {
             override fun onSessionClosed(errorResult: ErrorResult) {}
 
             override fun onSuccess(response: MeV2Response) {
-                profileImg = response.profileImagePath
-                Glide.with(this@InfoinputActivity).load(profileImg).apply(RequestOptions.circleCropTransform()).into(infoinput_profile_imng)
+                if (response.profileImagePath != "") {
+                    profileImg = response.profileImagePath
+                    Glide.with(this@InfoinputActivity).load(profileImg)
+                        .apply(RequestOptions.circleCropTransform())
+                        .into(infoinput_profile_imng)
+                }
             }
         })
     }

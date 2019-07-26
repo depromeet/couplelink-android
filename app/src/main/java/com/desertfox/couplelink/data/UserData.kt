@@ -9,7 +9,7 @@ object UserData {
     var currentCouple: CoupleModel? = null
         set(value) {
             field = value
-            if(value != null) {
+            if (value != null) {
                 field = value
                 value.apply {
                     members.forEach {
